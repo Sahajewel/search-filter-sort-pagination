@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Search</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+        font-size: 2em;
+      }
+
+      .search-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+
+      #productInput {
+        flex: 1;
+        padding: 15px 20px;
+        font-size: 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      #productInput:focus {
+        border-color: #667eea;
+      }
+
+      #searchButton {
+        padding: 15px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      #searchButton:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      #searchButton:active {
+        transform: translateY(0);
+      }
+
+      .results-container {
+        margin-top: 20px;
+      }
+
+      .product-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-left: 4px solid #667eea;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .product-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .product-name {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .product-price {
+        font-size: 1.1em;
+        color: #667eea;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .product-category {
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .no-results {
+        text-align: center;
+        color: #999;
+        font-size: 1.1em;
+        padding: 30px;
+      }
+
+      .results-title {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔍 Product Search</h1>
+
+      <div class="search-container">
+        <input
+          type="text"
+          id="productInput"
+          placeholder="Product name likhun (e.g., Laptop, Phone, Watch...)"
+        />
+        <button id="searchButton">Search</button>
+      </div>
+
+      <div class="results-container" id="resultsContainer"></div>
+    </div>
+
+    <script src="sorting.js"></script>
+    <script>
+      const products = [
+        { id: 1, name: "Laptop", price: 80000, category: "Electronics" },
+        { id: 2, name: "Phone", price: 50000, category: "Electronics" },
+        { id: 3, name: "Watch", price: 5000, category: "Fashion" },
+        { id: 4, name: "Shirt", price: 2000, category: "Fashion" },
+        { id: 5, name: "Monitor", price: 15000, category: "Electronics" },
+      ];
+
+      const productInput = document.getElementById("productInput");
+      const searchButton = document.getElementById("searchButton");
+      const resultsContainer = document.getElementById("resultsContainer");
+
+      // Search function
+      const searchProducts = (searchTerm) => {
+        if (!searchTerm.trim()) {
+          resultsContainer.innerHTML =
+            '<div class="no-results">Please enter a product name to search</div>';
+          return;
+        }
+
+        const filteredProducts = products.filter((product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        displayResults(filteredProducts, searchTerm);
+      };
+
+      // Display results
+      const displayResults = (results, searchTerm) => {
+        if (results.length === 0) {
+          resultsContainer.innerHTML = `<div class="no-results">"${searchTerm}" এর জন্য কোন product পাওয়া যায়নি</div>`;
+          return;
+        }
+
+        let html = `<div class="results-title">Found ${results.length} product(s):</div>`;
+
+        results.forEach((product) => {
+          html += `
+                    <div class="product-card">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">৳${product.price.toLocaleString()}</div>
+                        <div class="product-category">Category: ${
+                          product.category
+                        }</div>
+                    </div>
+                `;
+        });
+
+        resultsContainer.innerHTML = html;
+      };
+
+      // Event listeners
+      searchButton.addEventListener("click", () => {
+        searchProducts(productInput.value);
+      });
+
+      productInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          searchProducts(productInput.value);
+        }
+      });
+
+      // Show all products on load
+      displayResults(products, "");
+    </script>
+  </body>
+</html>
