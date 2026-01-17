@@ -30,10 +30,36 @@ const products = [
 
 // ৪. Pagination (অল্প অল্প করে দেখানো)
 // 0,1,2,3,4
-const page = 1;
-const limit = 2;
-const start = (page - 1) * limit;
-const end = start + limit;
+// const page = 1;
+// const limit = 2;
+// const start = (page - 1) * limit;
+// const end = start + limit;
 
-const paginationProducts = products.slice(start, end);
-console.log(paginationProducts);
+// const paginationProducts = products.slice(start, end);
+// console.log(paginationProducts);
+
+const search = (searchTerm)=>{
+  const searchingA = products.filter((product)=>product.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  console.log(searchingA)
+}
+search("P");
+
+const PriceFilter = products.filter(product=>product.price>50000)
+console.log(PriceFilter)
+
+
+  const price = [...products].sort((a,b)=>b.price-a.price)
+  console.log(price)
+
+  const page = 2;
+  const limit = 2;
+  const start = (page-1)*limit
+  const end = start + limit;
+  const pagination = products.slice(start, end)
+  console.log(pagination)
+
+  const searchSort = (search)=>{
+    const search2 = products.filter(product=>product.category.toLowerCase().includes(search.toLowerCase())).sort((a,b)=>b.price-a.price)
+    console.log(search2)
+  }
+  searchSort("Elec")
